@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Job Portal</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI';}
+
+/* THEME */
+body.light {background:#fff;}
+body.dark {background:#0f172a;color:white;}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 20px;
+  background:rgba(0,0,0,0.8);
+  color:white;
+}
+
+/* NAVBAR */
+nav{
+  display:flex;
+  gap:10px;
+  background:rgba(255,255,255,0.2);
+  padding:8px;
+  border-radius:30px;
+}
+
+nav button{
+  border:none;
+  padding:8px 15px;
+  border-radius:20px;
+  cursor:pointer;
+  background:transparent;
+  color:white;
+  transition:0.3s;
+}
+
+nav button:hover{
+  background:#ff4081;
+  transform:scale(1.1);
+}
+
+/* CONTAINER */
+.container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:85vh;
+  transition:0.5s;
+  animation:fade 0.5s;
+}
+
+/* PAGE COLORS */
+#home{background:linear-gradient(120deg,#ff9a9e,#fad0c4);}
+#jobs{background:linear-gradient(120deg,#a18cd1,#fbc2eb);}
+#apply{background:linear-gradient(120deg,#f6d365,#fda085);}
+#tracker{background:linear-gradient(120deg,#84fab0,#8fd3f4);}
+#profile{background:linear-gradient(120deg,#fccb90,#d57eeb);}
+#rating{background:linear-gradient(120deg,#43e97b,#38f9d7);}
+#about{background:linear-gradient(120deg,#fa709a,#fee140);}
+
+.card{
+  width:420px;
+  padding:20px;
+  border-radius:15px;
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(15px);
+  text-align:center;
+}
+
+.hidden{display:none;}
+
+input,textarea,select,button{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
+}
+
+button{
+  background:#111;
+  color:white;
+  cursor:pointer;
+}
+
+.job{
+  background:rgba(255,255,255,0.4);
+  padding:10px;
+  margin:10px 0;
+  border-radius:10px;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;}
+}
+</style>
+</head>
+
+<body class="light">
+
+<header>
+  <h3>🚀 Job Portal</h3>
+
+  <nav>
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('jobs')">Jobs</button>
+    <button onclick="show('apply')">Apply</button>
+    <button onclick="show('tracker')">Tracker</button>
+    <button onclick="show('profile')">Profile</button>
+    <button onclick="show('rating')">Rating</button>
+    <button onclick="show('about')">About</button>
+  </nav>
+
+  <button onclick="toggleTheme()">🌙</button>
+</header>
+
+<!-- HOME -->
+<div class="container" id="home">
+<div class="card">
+<h2>Welcome 👋</h2>
+<p>🔥 Find your dream job easily</p>
+
+</div>
+</div>
+
+<!-- JOBS -->
+<div class="container hidden" id="jobs">
+<div class="card">
+<h3>Jobs</h3>
+<input id="search" placeholder="Search">
+<select id="filter">
+<option value="">All</option>
+<option>IT</option>
+<option>Data</option>
+<option>Design</option>
+</select>
+<div id="jobList"></div>
+</div>
+</div>
+
+<!-- APPLY -->
+<div class="container hidden" id="apply">
+<div class="card">
+<h3>Apply Job</h3>
+<input id="jobTitle" placeholder="Job Title">
+<textarea id="cover" placeholder="Cover Letter"></textarea>
+<input type="file" id="resume">
+<button onclick="applyJob()">Apply</button>
+<p id="applyMsg"></p>
+</div>
+</div>
+
+<!-- TRACKER -->
+<div class="container hidden" id="tracker">
+<div class="card">
+<h3>Applications</h3>
+<div id="apps"></div>
+</div>
+</div>
+
+<!-- PROFILE -->
+<div class="container hidden" id="profile">
+<div class="card">
+<h3>Profile</h3>
+<input id="name" placeholder="Name">
+<input id="email" placeholder="Email">
+<input placeholder="Phone">
+<input placeholder="Location">
+<input placeholder="Skills">
+<input placeholder="Education">
+<input placeholder="Experience">
+<input placeholder="DOB">
+<input placeholder="Gender">
+<input placeholder="LinkedIn">
+<button onclick="saveProfile()">Save</button>
+<p id="profileMsg"></p>
+</div>
+</div>
+
+<!-- RATING -->
+<div class="container hidden" id="rating">
+<div class="card">
+<h3>Rate Us ⭐</h3>
+<select id="rate">
+<option>⭐</option>
+<option>⭐⭐</option>
+<option>⭐⭐⭐</option>
+<option>⭐⭐⭐⭐</option>
+<option>⭐⭐⭐⭐⭐</option>
+</select>
+<button onclick="saveRating()">Submit</button>
+<p id="rateMsg"></p>
+</div>
+</div>
+
+<!-- ABOUT -->
+<div class="container hidden" id="about">
+<div class="card">
+<h3>About</h3>
+<p>This is a colorful modern job portal like Naukri.</p>
+</div>
+</div>
+
+<script>
+function show(sec){
+  document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));
+  document.getElementById(sec).classList.remove('hidden');
+
+  if(sec=="jobs") loadJobs();
+  if(sec=="tracker") loadApps();
+}
+
+/* THEME */
+function toggleTheme(){
+  document.body.classList.toggle('dark');
+}
+
+/* JOBS */
+function loadJobs(){
+  let jobs=[
+    {t:"Software Engineer",c:"IT"},
+    {t:"Data Analyst",c:"Data"},
+    {t:"UI Designer",c:"Design"},
+    {t:"Frontend Dev",c:"IT"},
+    {t:"Backend Dev",c:"IT"},
+    {t:"AI Engineer",c:"Data"},
+    {t:"Tester",c:"IT"},
+    {t:"Cloud Engineer",c:"IT"},
+    {t:"Cyber Security",c:"IT"},
+    {t:"Mobile Dev",c:"IT"},
+    {t:"Full Stack Dev",c:"IT"},
+    {t:"ML Engineer",c:"Data"}
+  ];
+
+  let s=search.value.toLowerCase();
+  let f=filter.value;
+
+  jobList.innerHTML="";
+  jobs.filter(j=>(!s||j.t.toLowerCase().includes(s))&&(!f||j.c==f))
+  .forEach(j=>{
+    jobList.innerHTML+=`
+    <div class="job">
+      <b>${j.t}</b>
+      <p>${j.c}</p>
+      <button onclick="selectJob('${j.t}')">Apply</button>
+    </div>`;
+  });
+}
+
+function selectJob(t){
+  show("apply");
+  jobTitle.value=t;
+}
+
+/* APPLY */
+function applyJob(){
+  let arr=JSON.parse(localStorage.getItem("apps"))||[];
+  arr.push({title:jobTitle.value});
+  localStorage.setItem("apps",JSON.stringify(arr));
+  location.reload();
+}
+
+/* TRACKER */
+function loadApps(){
+  let arr=JSON.parse(localStorage.getItem("apps"))||[];
+  apps.innerHTML="";
+  arr.forEach(a=>{
+    apps.innerHTML+=`<div class="job">${a.title}</div>`;
+  });
+}
+
+/* PROFILE */
+function saveProfile(){
+  localStorage.setItem("name",name.value);
+  localStorage.setItem("email",email.value);
+  profileMsg.innerText="Saved!";
+}
+
+/* RATING */
+function saveRating(){
+  localStorage.setItem("rating",rate.value);
+  rateMsg.innerText="Thanks!";
+}
+</script>
+
+</body>
+</html>
+
