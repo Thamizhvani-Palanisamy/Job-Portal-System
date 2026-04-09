@@ -44,7 +44,7 @@ This project is built using **HTML, CSS, and JavaScript** with LocalStorage for 
 ## 📂 Project Structure
 
 ```
-index.html   → Main file (HTML + CSS + JS)
+https://github.com/Thamizhvani-Palanisamy/Job-Portal-System/deployments/github-pages
 ```
 
 ---
