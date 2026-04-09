@@ -3,6 +3,8 @@
 A colorful and modern **Job Portal Web Application** inspired by platforms like Naukri.
 This project is built using **HTML, CSS, and JavaScript** with LocalStorage for data handling.
 
+
+<img width="1873" height="1011" alt="image" src="https://github.com/user-attachments/assets/02968c50-e5ff-47da-a5ce-f61c100bc80c" />
 ---
 
 ## 🌟 Features
@@ -45,9 +47,6 @@ This project is built using **HTML, CSS, and JavaScript** with LocalStorage for 
 
 ```
 https://github.com/Thamizhvani-Palanisamy/Job-Portal-System/deployments/github-pages
-
-
-<img width="1873" height="1011" alt="image" src="https://github.com/user-attachments/assets/02968c50-e5ff-47da-a5ce-f61c100bc80c" />
 
 ```
 
